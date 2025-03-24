@@ -1,7 +1,10 @@
 import { extractLang } from "@/utils/extractLang";
+import { getLicenseLabel } from "@/utils/getLicenseLabel";
+import LicenseInfo from "@/components/LicenseInfo";
+import ProviderInfo from "@/components/ProviderInfo";
 
 export default function RecordCard({ data }: { data: any }) {
-  const proxy = data?.object?.proxies?.[0];
+  const proxy = data?.object?.proxies?.find((p: any) => !p.europeanaProxy);
   const aggregation = data?.object?.europeanaAggregation;
 
   const organization = extractLang(data?.object?.organizations?.[0]?.prefLabel);
@@ -18,10 +21,13 @@ export default function RecordCard({ data }: { data: any }) {
     .filter(Boolean)
     .join(" / ");
 
+  const rightsUrl = data?.object?.aggregations?.[0]?.edmRights?.def?.[0];
+  const { label: rightsLabel, description: rightsDescription } =
+    getLicenseLabel(rightsUrl);
+
   const sourceLink = data?.object?.aggregations?.[0]?.edmIsShownAt;
   const jsonUrl = `https://api.europeana.eu/record/v2${data?.object?.about}.json?wskey=${process.env.NEXT_PUBLIC_EUROPEANA_API_KEY}`;
 
-  // Try to extract image
   const rawImage =
     data?.object?.aggregations?.[0]?.edmObject || aggregation?.edmPreview;
 
@@ -32,7 +38,7 @@ export default function RecordCard({ data }: { data: any }) {
 
   return (
     <div className="bg-white p-4 shadow-md rounded-lg">
-      <div className="relative w-full h-[300px] mb-4">
+      <div className="relative w-full h-[300px] mb-3">
         <img
           src={image}
           alt={title || "Objekt"}
@@ -43,72 +49,77 @@ export default function RecordCard({ data }: { data: any }) {
           }}
         />
       </div>
-      <div className="space-y-1 text-sm">
-        {title && (
-          <p>
-            <strong>Titel:</strong> {title}
-          </p>
-        )}
-        {description && (
-          <p>
-            <strong>Beschreibung:</strong> {description}
-          </p>
-        )}
-        {subject && (
-          <p>
-            <strong>Thema:</strong> {subject}
-          </p>
-        )}
-        {type && (
-          <p>
-            <strong>Typ:</strong> {type}
-          </p>
-        )}
-        {country && (
-          <p>
-            <strong>Land:</strong> {country}
-          </p>
-        )}
-        {organization && (
-          <p>
-            <strong>Institution:</strong> {organization}
-          </p>
-        )}
-        {year && (
-          <p>
-            <strong>Jahr:</strong> {year}
-          </p>
-        )}
+      <div className="space-y-3 text-sm">
+        <div>{description && <p>{description}</p>}</div>
+        <div>
+          {subject && (
+            <p>
+              <strong>Thema:</strong> {subject}
+            </p>
+          )}
+          {type && (
+            <p>
+              <strong>Typ:</strong> {type}
+            </p>
+          )}
+        </div>
+        <div>
+          {year && (
+            <p>
+              <strong>Jahr:</strong> {year}
+            </p>
+          )}
+          {timePeriods && (
+            <p>
+              <strong>Zeitperiode:</strong> {timePeriods}
+            </p>
+          )}
+        </div>
+        <div>
+          {country && (
+            <p>
+              <strong>Land:</strong> {country}
+            </p>
+          )}
+          {organization && (
+            <p>
+              <strong>Institution:</strong> {organization}
+            </p>
+          )}
+        </div>
+
         {issued && (
           <p>
             <strong>Veröffentlicht:</strong> {issued}
           </p>
         )}
-        {timePeriods && (
-          <p>
-            <strong>Zeitperiode:</strong> {timePeriods}
-          </p>
+
+        {(rightsUrl || sourceLink) && (
+          <div className="flex justify-between items-center">
+            {rightsUrl && (
+              <LicenseInfo
+                url={rightsUrl}
+                label={rightsLabel}
+                description={rightsDescription}
+              />
+            )}
+            {sourceLink && <ProviderInfo url={sourceLink} />}
+          </div>
         )}
-        {sourceLink && (
-          <a
-            href={sourceLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-pink-700 underline block mt-2"
-          >
-            Quelle anzeigen
-          </a>
-        )}
-        {data?.object?.about && (
-          <a
-            href={jsonUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-blue-600 underline text-sm"
-          >
-            JSON anzeigen
-          </a>
-        )}
+        {/* Full Object JSON - for debugging ------------------- */}
+        {/* 
+          <div>
+            {data?.object?.about && (
+            <a
+              href={jsonUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-600 underline text-sm"
+            >
+              JSON anzeigen
+            </a>
+          </div>
+          )} */}
       </div>
     </div>
   );
