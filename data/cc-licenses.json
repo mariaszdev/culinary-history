@@ -1,0 +1,74 @@
+{
+  "https://creativecommons.org/licenses/by/4.0/": {
+    "label": "CC BY 4.0",
+    "title": "Attribution 4.0 International",
+    "icons": ["cc.svg", "by.svg"],
+    "description": {
+      "en": "This work may be used for any purpose, with attribution.",
+      "de": "Dieses Werk darf unter Angabe des Urhebers für beliebige Zwecke genutzt werden."
+    }
+  },
+  "https://creativecommons.org/licenses/by-sa/4.0/": {
+    "label": "CC BY-SA 4.0",
+    "icons": ["cc.svg", "by.svg", "sa.svg"],
+    "title": "Attribution-ShareAlike 4.0",
+    "description": {
+      "en": "Use with attribution and share alike.",
+      "de": "Dieses Werk darf unter Angabe des Urhebers genutzt und bearbeitet werden, muss aber unter gleichen Bedingungen weitergegeben werden."
+    }
+  },
+  "https://creativecommons.org/licenses/by-nd/4.0/": {
+    "label": "CC BY-ND 4.0",
+    "icons": ["cc.svg", "by.svg", "nd.svg"],
+    "title": "Attribution-NoDerivatives 4.0",
+    "description": {
+      "en": "Use with attribution, but no modifications allowed.",
+      "de": "Dieses Werk darf unter Angabe des Urhebers genutzt werden, jedoch sind keine Bearbeitungen erlaubt."
+    }
+  },
+  "https://creativecommons.org/licenses/by-nc/4.0/": {
+    "label": "CC BY-NC 4.0",
+    "icons": ["cc.svg", "by.svg", "nc-eu.svg"],
+    "title": "Attribution-NonCommercial 4.0",
+    "description": {
+      "en": "Use with attribution for non-commercial purposes only.",
+      "de": "Dieses Werk darf unter Angabe des Urhebers für nicht-kommerzielle Zwecke genutzt werden."
+    }
+  },
+  "https://creativecommons.org/licenses/by-nc-sa/4.0/": {
+    "label": "CC BY-NC-SA 4.0",
+    "icons": ["cc.svg", "by.svg", "nc-eu.svg", "sa.svg"],
+    "title": "Attribution-NonCommercial-ShareAlike",
+    "description": {
+      "en": "Non-commercial use, share alike, with attribution.",
+      "de": "Dieses Werk darf unter Angabe des Urhebers für nicht-kommerzielle Zwecke genutzt und bearbeitet werden, muss aber unter gleichen Bedingungen weitergegeben werden."
+    }
+  },
+  "https://creativecommons.org/licenses/by-nc-nd/4.0/": {
+    "label": "CC BY-NC-ND 4.0",
+    "icons": ["cc.svg", "by.svg", "nc-eu.svg", "nd.svg"],
+    "title": "Attribution-NonCommercial-NoDerivatives",
+    "description": {
+      "en": "Non-commercial use only, no modifications allowed.",
+      "de": "Dieses Werk darf unter Angabe des Urhebers für nicht-kommerzielle Zwecke genutzt werden, jedoch sind keine Bearbeitungen erlaubt."
+    }
+  },
+  "https://creativecommons.org/publicdomain/zero/1.0/": {
+    "label": "CC0 1.0",
+    "icons": ["cc.svg", "zero.svg"],
+    "title": "CC0 1.0 Universal",
+    "description": {
+      "en": "This work has been dedicated to the public domain.",
+      "de": "Dieses Werk wurde in die Gemeinfreiheit übergeben und kann ohne Einschränkungen genutzt werden."
+    }
+  },
+  "https://creativecommons.org/publicdomain/mark/1.0/": {
+    "label": "PDM 1.0",
+    "icons": ["cc.svg", "pd.svg"],
+    "title": "Public Domain Mark 1.0 Universal",
+    "description": {
+      "en": "This work is believed to be free of known copyright restrictions.",
+      "de": "Dieses Werk ist vermutlich gemeinfrei und kann ohne urheberrechtliche Einschränkungen genutzt werden."
+    }
+  }
+}
