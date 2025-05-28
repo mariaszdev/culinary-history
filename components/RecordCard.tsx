@@ -1,47 +1,16 @@
-import { extractLang } from "@/utils/extractLang";
-import { getLicenseLabel } from "@/utils/getLicenseLabel";
 import LicenseInfo from "@/components/LicenseInfo";
 import ProviderInfo from "@/components/ProviderInfo";
+import { extractRecordInfo } from "@/utils/extractRecordInfo";
 
 export default function RecordCard({ data }: { data: any }) {
-  const proxy = data?.object?.proxies?.find((p: any) => !p.europeanaProxy);
-  const aggregation = data?.object?.europeanaAggregation;
-
-  const organization = extractLang(data?.object?.organizations?.[0]?.prefLabel);
-  const title = extractLang(proxy?.dcTitle);
-  const description = extractLang(proxy?.dcDescription);
-  const subject = extractLang(proxy?.dcSubject);
-  const type = extractLang(proxy?.dcType);
-  const country = aggregation?.edmCountry?.def?.[0];
-  const year = proxy?.year?.def?.[0];
-  const issued = proxy?.dctermsIssued?.def?.[0];
-
-  const timePeriods = data?.object?.timespans
-    ?.map((ts: any) => extractLang(ts.prefLabel))
-    .filter(Boolean)
-    .join(" / ");
-
-  const rightsUrl = data?.object?.aggregations?.[0]?.edmRights?.def?.[0];
-  const { label: rightsLabel, description: rightsDescription } =
-    getLicenseLabel(rightsUrl);
-
-  const sourceLink = data?.object?.aggregations?.[0]?.edmIsShownAt;
-  const jsonUrl = `https://api.europeana.eu/record/v2${data?.object?.about}.json?wskey=${process.env.NEXT_PUBLIC_EUROPEANA_API_KEY}`;
-
-  const rawImage =
-    data?.object?.aggregations?.[0]?.edmObject || aggregation?.edmPreview;
-
-  const image =
-    typeof rawImage === "string" && rawImage.startsWith("http")
-      ? rawImage
-      : "/placeholder.jpg";
+  const info = extractRecordInfo(data);
 
   return (
     <div className="bg-white p-4 shadow-md rounded-lg">
       <div className="relative w-full h-[300px] mb-3">
         <img
-          src={image}
-          alt={title || "Objekt"}
+          src={info.image}
+          alt={info.title || "Objekt"}
           className="object-cover w-full h-full rounded"
           onError={(e) => {
             const target = e.target as HTMLImageElement;
@@ -50,76 +19,77 @@ export default function RecordCard({ data }: { data: any }) {
         />
       </div>
       <div className="space-y-3 text-sm">
-        <div>{description && <p>{description}</p>}</div>
+        <div>{info.title && <p>{info.title}</p>}</div>
         <div>
-          {subject && (
+          {info.subject && (
             <p>
-              <strong>Thema:</strong> {subject}
+              <strong>Thema:</strong> {info.subject}
             </p>
           )}
-          {type && (
+          {info.type && (
             <p>
-              <strong>Typ:</strong> {type}
+              <strong>Typ:</strong> {info.type}
             </p>
           )}
         </div>
         <div>
-          {year && (
+          {info.year && (
             <p>
-              <strong>Jahr:</strong> {year}
+              <strong>Jahr:</strong> {info.year}
             </p>
           )}
-          {timePeriods && (
+          {info.timePeriods?.length > 0 && (
             <p>
-              <strong>Zeitperiode:</strong> {timePeriods}
+              <strong>Zeitperiode:</strong> {info.timePeriods.join(", ")}
             </p>
           )}
         </div>
         <div>
-          {country && (
+          {info.country && (
             <p>
-              <strong>Land:</strong> {country}
+              <strong>Land:</strong> {info.country}
             </p>
           )}
-          {organization && (
+          {info.organization && (
             <p>
-              <strong>Institution:</strong> {organization}
+              <strong>Institution:</strong> {info.organization}
             </p>
           )}
         </div>
 
-        {issued && (
+        {info.issued && (
           <p>
-            <strong>Veröffentlicht:</strong> {issued}
+            <strong>Veröffentlicht:</strong> {info.issued}
           </p>
         )}
 
-        {(rightsUrl || sourceLink) && (
+        {(info.rightsUrl || info.sourceLink) && (
           <div className="flex justify-between items-center">
-            {rightsUrl && (
+            {info.rightsUrl && (
               <LicenseInfo
-                url={rightsUrl}
-                label={rightsLabel}
-                description={rightsDescription}
+                url={info.rightsUrl}
+                label={info.rightsLabel}
+                title={info.rightsTitle}
+                icons={info.rightsIcons}
               />
             )}
-            {sourceLink && <ProviderInfo url={sourceLink} />}
+            {info.sourceLink && <ProviderInfo url={info.sourceLink} />}
           </div>
         )}
+
         {/* Full Object JSON - for debugging ------------------- */}
-        {/* 
-          <div>
-            {data?.object?.about && (
+        <div>
+          {data?.object?.about && (
             <a
-              href={jsonUrl}
+              href={info.jsonUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="text-blue-600 underline text-sm"
             >
               JSON anzeigen
             </a>
-          </div>
-          )} */}
+          )}
+        </div>
       </div>
     </div>
   );

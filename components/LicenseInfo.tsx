@@ -2,15 +2,19 @@
 
 import { useState, useRef, useEffect } from "react";
 
+interface LicenseInfoProps {
+  url: string;
+  label: string;
+  title: string;
+  icons?: string[];
+}
+
 export default function LicenseInfo({
   url,
   label,
-  description,
-}: {
-  url: string;
-  label: string;
-  description: string;
-}) {
+  title,
+  icons = [],
+}: LicenseInfoProps) {
   const [isHovered, setIsHovered] = useState(false);
   const tooltipRef = useRef<HTMLDivElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -19,9 +23,7 @@ export default function LicenseInfo({
   useEffect(() => {
     if (isHovered && tooltipRef.current && containerRef.current) {
       const tooltipRect = tooltipRef.current.getBoundingClientRect();
-      const containerRect = containerRef.current.getBoundingClientRect();
       const overflowRight = tooltipRect.right > window.innerWidth;
-
       setAlignRight(overflowRight);
     }
   }, [isHovered]);
@@ -37,22 +39,31 @@ export default function LicenseInfo({
         href={url}
         target="_blank"
         rel="noopener noreferrer"
-        className="block px-3 py-2 bg-gray-100 rounded text-gray-600 hover:text-pink-800 text-sm font-semibold"
+        className="flex items-center gap-1"
         style={{ textDecoration: "none" }}
       >
-        {label}
+        {icons.map((icon, idx) => (
+          <img
+            key={idx}
+            src={`/license-icons/${icon}`}
+            alt={`${label} icon ${idx + 1}`}
+            width={30}
+            height={30}
+            className="inline-block"
+          />
+        ))}
       </a>
 
       {isHovered && (
         <div
           ref={tooltipRef}
-          className={`absolute top-full mt-[-1px] z-10 min-w-[250px] max-w-md py-2 px-3 bg-white border border-gray-300 rounded shadow-lg text-sm text-gray-800 ${
+          className={`absolute top-full mt-[-1px] z-10 min-w-[290px] max-w-md py-2 px-3 bg-white border border-gray-300 rounded shadow-lg text-sm text-gray-800 ${
             alignRight ? "right-0" : "left-0"
           }`}
         >
-          <p>{description}</p>
+          <p className={"font-bold"}>{label}</p>
+          <p className="mt-1">{title}</p>
           <p className="mt-2 break-words">
-            Read more at:{" "}
             <a
               href={url}
               target="_blank"
